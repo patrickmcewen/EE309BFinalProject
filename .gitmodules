@@ -1,0 +1,3 @@
+[submodule "NVSim"]
+	path = NVSim
+	url = https://github.com/SEAL-UCSB/NVSim.git

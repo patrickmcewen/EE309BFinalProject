@@ -24,6 +24,7 @@ n_folding_wl=my_gcedram_in.n_folding_wl;
 dec_intconbuff_2=my_gcedram_in.dec_intconbuff_2;
 dec_intconbuff_3=my_gcedram_in.dec_intconbuff_3;
 globadr_buff=my_gcedram_in.globadr_buff;
+peripheral_under_array=my_gcedram_in.peripheral_under_array;
 
 %% memory dimensions
 % width and height of the GC array
@@ -78,7 +79,6 @@ end
 %% area efficiency
 area_bitcells   = 2^(n_partitioning_bl+n_partitioning_wl+n_folding_bl+n_folding_wl)*(gcarray_width*gcarray_height);
 area_tot        = d_width*d_height;
-area_efficiency = area_bitcells/area_tot * 100;
 
 %% area breakdown: width and height contributions per category
 % Number of sub-array tiles in each dimension after all transformations
@@ -99,6 +99,13 @@ d_width_local = d_width - d_width_subarray - d_width_global; % per-sub-array buf
 % Height contributions
 d_height_subarray = gcarray_height * N_row; % total GC-array height (all row tiles)
 d_height_local    = d_height - d_height_subarray; % WBL buffer, FF, SA, mux buffer (per row tile)
+
+if peripheral_under_array
+    array_area      = d_width_subarray * d_height_subarray;
+    peripheral_area = area_tot - array_area;
+    area_tot        = max(array_area, peripheral_area);
+end
+area_efficiency = area_bitcells/area_tot * 100;
 
 
 %% memory density

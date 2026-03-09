@@ -69,7 +69,7 @@
       "subarray": 9.237308699e-05,
       "local": 7e-06
     },
-    "area_efficiency": 66.88799051,
-    "memory_density": 5.13732646e+12
+    "area_efficiency": 100,
+    "memory_density": 7.680491551e+12
   }
 }

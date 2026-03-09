@@ -10,6 +10,8 @@ function my_gcedram_in = load_28fdsoi_3tn
 my_gcedram_in.n_rows    = 256;
 my_gcedram_in.n_word    = 64;   
 
+my_gcedram_in.peripheral_under_array = 0;
+
 my_gcedram_in.n_partitioning_bl = 0;
 my_gcedram_in.n_partitioning_wl = 0;
 my_gcedram_in.n_folding_bl      = 0;

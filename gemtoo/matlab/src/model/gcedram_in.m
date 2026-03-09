@@ -7,6 +7,8 @@ classdef gcedram_in
         n_rows % number of rows in GC array
         n_word % number of coloumns in GC array and wordsize of the GC-eDRAM
 
+        peripheral_under_array % peripheral circuits are under the array when equal to 1
+
         % architectural transformations
         n_partitioning_bl   % partitioning factor for BL cut
         n_partitioning_wl   % partitioning factor for WL cut

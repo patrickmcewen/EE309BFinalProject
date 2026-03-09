@@ -1,0 +1,8 @@
+name: ee309b_final
+channels:
+  - defaults
+dependencies:
+  - python
+  - numpy
+  - pyyaml
+  - matplotlib

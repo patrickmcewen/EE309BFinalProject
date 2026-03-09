@@ -33,7 +33,11 @@ for i = 1:numel(m_files)
     input_loader = m_files(i).name(1:end-2);  % strip .m extension
     disp(' ');
     disp(['[', num2str(i), '/', num2str(numel(m_files)), '] Running: ', input_loader]);
-    run_and_save(input_loader, out_dir);
+    try
+        run_and_save(input_loader, out_dir);
+    catch e
+        disp(['SKIPPED (error): ', e.message]);
+    end
 end
 
 disp(' '); disp(['Sweep complete. Results saved to: ', out_dir]);

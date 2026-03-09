@@ -30,6 +30,7 @@ classdef gcedram_out
         bw      % memory bandwidth [bit/s]
 
         %% area
+        total_area          % total memory area [m2]
         d_width             % memory width [m]
         d_height            % memory height [m]
         area_efficiency     % area efficiency [%] : ratio between the area of the GC arrays and the total memory area

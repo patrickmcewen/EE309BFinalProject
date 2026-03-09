@@ -1,0 +1,40 @@
+# Sweep configurations for run_sweeps.py
+#
+# Each entry under 'sweeps' maps to one call of sweep_arch.py followed by
+# a MATLAB run_sweep execution.  All fields except n_rows and n_word are optional.
+#
+# sweep_arch.py fields (see --help for details):
+#   base            : base .m input file in src/inputs/  (default: load_28fdsoi_3tn.m)
+#   partitioning_bl : list of n_partitioning_bl values   (default: [0,1,2,3,4])
+#   partitioning_wl : list of n_partitioning_wl values   (default: [0,1,2,3,4])
+#   folding_bl      : list of n_folding_bl values        (default: [0,1,2,3,4])
+#   folding_wl      : list of n_folding_wl values        (default: [0,1,2,3,4])
+#   max_rows        : upper bound on rows per subarray   (default: no limit)
+#   max_cols        : upper bound on cols per subarray   (default: no limit)
+#   min_rows        : lower bound on rows per subarray   (default: no limit)
+#   min_cols        : lower bound on cols per subarray   (default: no limit)
+#
+# out_dir: where MATLAB writes JSON results.
+#   Defaults to <repo>/gemtoo/matlab/src/outputs/sweep_r{n_rows}_w{n_word}
+
+sweeps:
+  - name: sweep_r1024_w64_2
+    n_rows: 1024
+    n_word: 64
+    base: load_28fdsoi_3tn.m
+    partitioning_bl: [0, 1, 2, 3, 4]
+    partitioning_wl: [0, 1]
+    folding_bl: [0, 1, 2, 3, 4]
+    folding_wl: [0, 1]
+    max_rows: 256
+    max_cols: 64
+
+  # Add new configurations below:
+  # - name: sweep_r512_w128
+  #   n_rows: 512
+  #   n_word: 128
+  #   base: load_28fdsoi_3tn.m
+  #   partitioning_bl: [0, 1, 2, 3]
+  #   partitioning_wl: [0, 1, 2]
+  #   folding_bl: [0, 1, 2, 3]
+  #   folding_wl: [0, 1, 2]

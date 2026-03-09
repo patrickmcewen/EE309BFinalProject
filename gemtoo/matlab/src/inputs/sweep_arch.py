@@ -96,6 +96,8 @@ def main():
                         if pwl + fwl <= max_wl_shift]
         print(f'min_cols={args.min_cols}: requires pwl+fwl<={max_wl_shift}, kept {len(combinations)}/{before}')
 
+    combinations = [(pbl, pwl, fbl, fwl) for pbl, pwl, fbl, fwl in combinations if abs(pbl - fbl) <= 1 and abs(pwl - fwl) <= 1]
+
     print(f'Output directory: {out_dir}')
     print(f'Generating {len(combinations)} configurations...')
 

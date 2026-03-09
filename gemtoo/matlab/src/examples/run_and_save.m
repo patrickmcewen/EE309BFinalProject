@@ -89,6 +89,7 @@ fprintf(fid, ',\n  "bw": %.10g',    o.bw);
 
 %% area
 fprintf(fid, ',\n  "area": {');
+fprintf(fid, '\n    "total_area": %.10g,', o.total_area);
 fprintf(fid, '\n    "d_width": {');
 fprintf(fid, '\n      "total": %.10g',    o.d_width);
 fprintf(fid, ',\n      "subarray": %.10g', o.d_width_subarray);

@@ -114,6 +114,7 @@ memory_density = bitcell_number/area_tot;
 
 
 %% writing to output class
+my_gcedram_out.total_area       = area_tot;
 my_gcedram_out.d_width          = d_width;
 my_gcedram_out.d_height         = d_height;
 my_gcedram_out.area_efficiency  = area_efficiency;

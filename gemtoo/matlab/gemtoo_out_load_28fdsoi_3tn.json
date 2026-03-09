@@ -1,0 +1,75 @@
+{
+  "input_file": "load_28fdsoi_3tn",
+  "architecture": {
+    "n_rows": 256,
+    "n_word": 64,
+    "n_partitioning_bl": 0,
+    "n_partitioning_wl": 0,
+    "n_folding_bl": 0,
+    "n_folding_wl": 0,
+    "ref_period": 3e-06,
+    "sn_degradation": 30,
+    "globadr_buff": 1,
+    "ref_rate_mode": "ref_period",
+    "rblmux_topology": "tree"
+  },
+  "timing": {
+    "fmax": 680019003.2,
+    "tread": 1.47054714e-09,
+    "twrite": 2.880474656e-10,
+    "twwl": {
+      "total": 2.880474656e-10,
+      "subarray": 3.791841253e-12,
+      "local": 4.810948871e-11,
+      "global": 2.361461357e-10
+    },
+    "twbl": {
+      "total": 2.797436859e-10,
+      "subarray": 5.406723799e-11,
+      "local": 1.88676448e-10,
+      "global": 3.7e-11
+    },
+    "trwl": {
+      "total": 2.389319429e-10,
+      "subarray": 3.830962751e-12,
+      "local": 4.895484448e-11,
+      "global": 1.861461357e-10
+    },
+    "trbl": {
+      "total": 1.231615197e-09,
+      "subarray": 1.21561338e-09,
+      "local": 1.600181654e-11,
+      "global": 0
+    },
+    "t_ff": 3.7e-11,
+    "tdec": 1.491461357e-10,
+    "t_ls": 5e-11,
+    "t_wwl_globadr": 0,
+    "t_inv_boost_fo1": 7.5e-12,
+    "t_wwl_buffer": 4.440132996e-11,
+    "t_inv_fo1": 7.5e-12,
+    "t_wbl_buffer": 2.352436859e-10,
+    "t_rwl_globadr": 0,
+    "t_rwl_buffer": 4.528580723e-11,
+    "t_gc_rbl": 1.215615197e-09,
+    "t_sa": 1.6e-11,
+    "t_mux": 0
+  },
+  "avail": 87.45133107,
+  "bw": 3.805988287e+10,
+  "area": {
+    "d_width": {
+      "total": 3.660173908e-05,
+      "subarray": 2.760173908e-05,
+      "local": 3e-06,
+      "global": 6e-06
+    },
+    "d_height": {
+      "total": 0.0001174069563,
+      "subarray": 0.0001104069563,
+      "local": 7e-06
+    },
+    "area_efficiency": 70.91487364,
+    "memory_density": 3.812627615e+12
+  }
+}

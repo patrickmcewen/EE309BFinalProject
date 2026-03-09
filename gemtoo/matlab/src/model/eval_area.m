@@ -80,6 +80,26 @@ area_bitcells   = 2^(n_partitioning_bl+n_partitioning_wl+n_folding_bl+n_folding_
 area_tot        = d_width*d_height;
 area_efficiency = area_bitcells/area_tot * 100;
 
+%% area breakdown: width and height contributions per category
+% Number of sub-array tiles in each dimension after all transformations
+N_col = 2^(n_partitioning_wl + n_folding_bl); % column-direction tiling factor
+N_row = 2^(n_partitioning_bl + n_folding_wl); % row-direction tiling factor
+
+% Width contributions
+d_width_subarray = gcarray_width * N_col;   % total GC-array width (all column tiles)
+if ( (n_partitioning_wl + n_folding_bl) > 0 )
+    % Partitioned/folded: decoder, LS, and global address buffers are global (added once)
+    d_width_global = (2*d_dec + d_ls) + (d_globadr_buffer + d_globadr_boost_buffer);
+else
+    % Monolithic: decoder, LS, and FFs are all part of the single-level control
+    d_width_global = 2*d_ff + 2*d_dec + d_ls;
+end
+d_width_local = d_width - d_width_subarray - d_width_global; % per-sub-array buffers (and FFs if partitioned)
+
+% Height contributions
+d_height_subarray = gcarray_height * N_row; % total GC-array height (all row tiles)
+d_height_local    = d_height - d_height_subarray; % WBL buffer, FF, SA, mux buffer (per row tile)
+
 
 %% memory density
 bitcell_number = 2^(n_partitioning_bl+n_partitioning_wl+n_folding_bl+n_folding_wl)*(n_word*n_rows);
@@ -91,5 +111,11 @@ my_gcedram_out.d_width          = d_width;
 my_gcedram_out.d_height         = d_height;
 my_gcedram_out.area_efficiency  = area_efficiency;
 my_gcedram_out.memory_density   = memory_density;
+% area breakdown
+my_gcedram_out.d_width_subarray  = d_width_subarray;
+my_gcedram_out.d_width_local     = d_width_local;
+my_gcedram_out.d_width_global    = d_width_global;
+my_gcedram_out.d_height_subarray = d_height_subarray;
+my_gcedram_out.d_height_local    = d_height_local;
 
 

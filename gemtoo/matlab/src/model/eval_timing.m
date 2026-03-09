@@ -101,6 +101,9 @@ tau_wwl_buffer  = r_wwl_buffer * (c_wwl_buffer + n_word*c_wwl_cell) ;
 tau_wwl_cells   = r_wire_hor * (n_word+1)*n_word/2 * c_wwl_cell ;
 tau_wwl         = tau_wwl_buffer + tau_wwl_cells ;
 t_wwl_buffer    = (-tau_wwl * log(1-h_wwl)); % delay of local-WWL buffer
+% breakdown: since t = -tau*log(1-h) is linear in tau, sub-components are separable
+t_wwl_buffer_local  = -tau_wwl_buffer * log(1-h_wwl); % local buffer resistance contribution
+t_wwl_buffer_array  = -tau_wwl_cells  * log(1-h_wwl); % distributed array RC contribution
 % global-WWL buffer
 if ( n_partitioning_wl+n_folding_bl > 0 )
     t_wwl_globadr = t_inv_boost_fo1 + (-tau_wl_globadr_boost * log(1-0.5)) + t_and_boost_fo1;
@@ -118,6 +121,9 @@ tau_wbl_cells   = r_wire_ver*( (n_rows+1)*n_rows/2*c_wbl_cell + n_rows*c_sn ) ;
 tau_wbl_sn      = r_wwl_on*c_sn;
 tau_wbl         = tau_wbl_buffer + tau_wbl_cells + tau_wbl_sn ;
 t_wbl_buffer    = (-tau_wbl * log(1-h_wbl));
+% breakdown
+t_wbl_buffer_local  = -tau_wbl_buffer * log(1-h_wbl);              % local buffer resistance contribution
+t_wbl_buffer_array  = -(tau_wbl_cells + tau_wbl_sn) * log(1-h_wbl); % distributed array RC + SN charging via WWL transistor
 % WBL delay
 twbl = t_ff + t_inv_fo1 + t_wbl_buffer ;
 
@@ -131,6 +137,9 @@ tau_rwl_buffer  = r_rwl_buffer * (c_rwl_buffer + n_word*c_rwl_cell) ;
 tau_rwl_cells   = r_wire_hor * (n_word+1)*n_word/2 * c_rwl_cell ;
 tau_rwl         = tau_rwl_buffer + tau_rwl_cells ;
 t_rwl_buffer = (-tau_rwl * log(1-h_rwl)) ;
+% breakdown
+t_rwl_buffer_local  = -tau_rwl_buffer * log(1-h_rwl); % local buffer resistance contribution
+t_rwl_buffer_array  = -tau_rwl_cells  * log(1-h_rwl); % distributed array RC contribution
 % global-RWL buffer
 if ( n_partitioning_wl+n_folding_bl ~= 0 )
     t_rwl_globadr = t_inv_fo1 + (-tau_wl_globadr * log(1-0.5)) + t_and_fo1;
@@ -163,6 +172,9 @@ tau_rbl_cells   = r_wire_ver*( n_rows*(n_rows-1)/2*c_rbl_cell + (n_rows-1)*(c_wi
 tau_sa          = r_wire_ver*(c_wire_ver+c_sa);
 tau_rbl         = tau_rbl_on + tau_rbl_cells + tau_sa;
 t_gc_rbl   = (-tau_rbl * log(1-h_rbl));
+% breakdown
+t_rbl_array = -(tau_rbl_on + tau_rbl_cells) * log(1-h_rbl); % GC on-resistance + distributed cell RC
+t_rbl_sa    = -tau_sa * log(1-h_rbl);                        % last wire segment to sense amplifier
 % delay of RBL muxing
 if ( strcmp(rblmux_topology,'tree') )
     t_mux = eval_timing_rblmuxtree(my_gcedram_in);
@@ -181,6 +193,36 @@ tread   = trwl + trbl;
 % fmax
 tmin = max([twrite tread]);
 fmax = 1/tmin;
+
+
+%% per-path timing breakdown: subarray / local peripheral / global
+% WWL: global = FF + decoder + level-shifter + global address routing
+%       local = pre-driver inverter + local buffer resistance
+%      subarray = distributed RC along GC cells on the word-line
+twwl_subarray = t_wwl_buffer_array;
+twwl_local    = t_inv_boost_fo1 + t_wwl_buffer_local;
+twwl_global   = t_ff + tdec + t_ls + t_wwl_globadr;
+
+% WBL: global = FF
+%       local = pre-driver inverter + local buffer resistance
+%      subarray = distributed RC along GC cells on the bit-line + SN charging via WWL transistor
+twbl_subarray = t_wbl_buffer_array;
+twbl_local    = t_inv_fo1 + t_wbl_buffer_local;
+twbl_global   = t_ff;
+
+% RWL: global = FF + decoder + global address routing
+%       local = pre-driver inverter + local buffer resistance
+%      subarray = distributed RC along GC cells on the word-line
+trwl_subarray = t_rwl_buffer_array;
+trwl_local    = t_inv_fo1 + t_rwl_buffer_local;
+trwl_global   = t_ff + tdec + t_rwl_globadr;
+
+% RBL: global = RBL mux (selects across sub-arrays; 0 if monolithic array)
+%       local = last wire segment to SA + sense amplifier delay
+%      subarray = GC on-resistance driving RBL + distributed cell RC
+trbl_subarray = t_rbl_array;
+trbl_local    = t_rbl_sa + t_sa;
+trbl_global   = t_mux;
 
 
 %% writing to output class
@@ -204,5 +246,20 @@ my_gcedram_out.t_rwl_buffer     = t_rwl_buffer;
 my_gcedram_out.t_gc_rbl         = t_gc_rbl;
 my_gcedram_out.t_sa             = t_sa;
 my_gcedram_out.t_mux            = t_mux;
+% timing breakdown
+my_gcedram_out.twwl_subarray    = twwl_subarray;
+my_gcedram_out.twwl_local       = twwl_local;
+my_gcedram_out.twwl_global      = twwl_global;
+my_gcedram_out.twbl_subarray    = twbl_subarray;
+my_gcedram_out.twbl_local       = twbl_local;
+my_gcedram_out.twbl_global      = twbl_global;
+my_gcedram_out.trwl_subarray    = trwl_subarray;
+my_gcedram_out.trwl_local       = trwl_local;
+my_gcedram_out.trwl_global      = trwl_global;
+my_gcedram_out.trbl_subarray    = trbl_subarray;
+my_gcedram_out.trbl_local       = trbl_local;
+my_gcedram_out.trbl_global      = trbl_global;
+my_gcedram_out.tread            = tread;
+my_gcedram_out.twrite           = twrite;
 
 

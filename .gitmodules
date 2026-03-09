@@ -1,3 +1,6 @@
 [submodule "NVSim"]
 	path = NVSim
 	url = https://github.com/SEAL-UCSB/NVSim.git
+[submodule "public_OSFET_cmodel"]
+	path = public_OSFET_cmodel
+	url = https://github.com/kjstanford/public_OSFET_cmodel.git

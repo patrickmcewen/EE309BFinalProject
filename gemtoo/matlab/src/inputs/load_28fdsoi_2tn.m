@@ -28,8 +28,8 @@ my_gcedram_in.h_rbl = 0.58;
 my_gcedram_in.h_wwl = 0.9;  
 my_gcedram_in.h_wbl = 0.9;  
 
-my_gcedram_in.gc_width      = sqrt(0.186e-12);  
-my_gcedram_in.gc_height     = sqrt(0.186e-12);  
+my_gcedram_in.gc_width      = sqrt(0.186e-12 * 0.7); % 2T area ~ 70% of 3T area
+my_gcedram_in.gc_height     = sqrt(0.186e-12 * 0.7);  
 
 my_gcedram_in.c_wwl  = 63e-18;  
 my_gcedram_in.c_wbl  = 37e-18;  
@@ -39,7 +39,7 @@ my_gcedram_in.c_sn   = 97e-18;
 
 my_gcedram_in.sn_degr_vect = [0:10:40];
 
-my_gcedram_in.r_rbl_on_vect = 3/4.*0.9./[59e-6 , 47e-6 , 34e-6 , 22e-6 , 13e-6];
+my_gcedram_in.r_rbl_on_vect = 1/2 .* 3/4.*0.9./[59e-6 , 47e-6 , 34e-6 , 22e-6 , 13e-6]; % divide by 2 because read path has only 1 transistor
 my_gcedram_in.r_wwl_on = 15e3;
 
 my_gcedram_in.tret_vect = [0 , 45e-9 , 483e-9 , 3.98e-6 , 19.24e-6];
